@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/lishengping/星星之火/Assets/Scripts/Inventory/**)"
+    ]
+  }
+}

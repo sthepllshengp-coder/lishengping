@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>修仙田园录 - Roguelike 修仙版</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        #gameContainer {
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #gameCanvas { display: block; background: #2d5a27; }
+        .ui-panel {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+        #statusPanel { top: 10px; left: 10px; min-width: 200px; }
+        #skillPanel { bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
+        #expBar { width: 100%; height: 20px; background: #333; border-radius: 10px; overflow: hidden; margin: 5px 0; }
+        #expFill { height: 100%; background: linear-gradient(90deg, #00ff00, #00ff88); width: 0%; transition: width 0.3s; }
+        #hpBar { width: 100%; height: 15px; background: #333; border-radius: 10px; overflow: hidden; margin: 5px 0; }
+        #hpFill { height: 100%; background: linear-gradient(90deg, #ff0000, #ff6666); width: 100%; transition: width 0.3s; }
+        .stat-row { display: flex; justify-content: space-between; margin: 5px 0; font-size: 14px; }
+        .skill-slot {
+            width: 60px; height: 60px;
+            background: rgba(50, 50, 50, 0.9);
+            border: 2px solid #888; border-radius: 8px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 12px; position: relative;
+            transition: all 0.2s;
+        }
+        .skill-slot.ready { border-color: #00ff00; box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+        .skill-slot.cooldown { border-color: #ff6600; opacity: 0.6; }
+        .skill-slot .cd-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: rgba(0, 0, 0, 0.7); text-align: center;
+            font-weight: bold; font-size: 16px; color: #fff;
+        }
+        .skill-icon { font-size: 24px; }
+        #startScreen, #heroSelectScreen, #talentSelectScreen, #gameOverScreen {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 100;
+        }
+        #startScreen h1, #heroSelectScreen h2, #talentSelectScreen h2, #gameOverScreen h2 {
+            color: #ffd700; font-size: 48px; margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .btn {
+            padding: 15px 40px; font-size: 24px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: none; border-radius: 10px; color: #000;
+            cursor: pointer; font-weight: bold;
+            transition: all 0.3s; margin: 10px;
+        }
+        .btn:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+        .hero-card {
+            background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
+            border: 2px solid #ffd700; border-radius: 15px;
+            padding: 20px; margin: 10px; cursor: pointer;
+            transition: all 0.3s; width: 180px; text-align: center;
+        }
+        .hero-card:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        .hero-cards { display: flex; flex-wrap: wrap; justify-content: center; max-width: 1000px; }
+        .hero-avatar { font-size: 64px; margin-bottom: 10px; }
+        .hero-name { font-size: 20px; color: #ffd700; margin-bottom: 5px; }
+        .hero-type { font-size: 14px; color: #888; margin-bottom: 10px; }
+        .hero-desc { font-size: 12px; color: #aaa; }
+        .hero-stats { font-size: 11px; color: #666; margin-top: 10px; }
+        .talent-card {
+            background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
+            border: 2px solid #00ff88; border-radius: 15px;
+            padding: 20px; margin: 10px; cursor: pointer;
+            transition: all 0.3s; width: 250px; text-align: center;
+        }
+        .talent-card:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 255, 136, 0.6); }
+        .talent-name { font-size: 20px; color: #00ff88; margin-bottom: 10px; }
+        .talent-desc { font-size: 14px; color: #aaa; }
+        .talents-container { display: flex; flex-wrap: wrap; justify-content: center; }
+        #synergyPanel { top: 10px; right: 10px; min-width: 180px; }
+        .synergy-item { margin: 8px 0; padding: 8px; background: rgba(50, 50, 50, 0.8); border-radius: 5px; font-size: 13px; }
+        .synergy-active { color: #00ff88; border-left: 3px solid #00ff88; padding-left: 10px; }
+        .hidden { display: none !important; }
+        #damageNumbers { position: absolute; top: 0; left: 0; pointer-events: none; overflow: hidden; }
+        .damage-number {
+            position: absolute; font-weight: bold; font-size: 18px;
+            animation: floatUp 1s ease-out forwards;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
+        }
+        #levelupNotify {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 72px; color: #ffd700;
+            text-shadow: 0 0 50px rgba(255, 215, 0, 0.8);
+            animation: levelUp 2s ease-out forwards;
+            pointer-events: none; z-index: 200;
+        }
+        @keyframes levelUp {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            40% { transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+        #realmText { color: #ffd700; font-weight: bold; text-align: center; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas" width="1024" height="768"></canvas>
+        <div id="damageNumbers"></div>
+
+        <div id="startScreen">
+            <h1>修仙田园录</h1>
+            <p style="color:#aaa; margin-bottom:30px; font-size:18px;">Roguelike 修仙 Survivor</p>
+            <button class="btn" id="startBtn">开始游戏</button>
+            <p style="color:#666; margin-top:20px; font-size:14px;">WASD/方向键移动 | 自动攻击 | 每 10 级境界突破</p>
+        </div>
+
+        <div id="heroSelectScreen" class="hidden">
+            <h2>选择你的英雄</h2>
+            <div class="hero-cards" id="heroCards"></div>
+        </div>
+
+        <div id="talentSelectScreen" class="hidden">
+            <h2>选择天赋</h2>
+            <div class="talents-container" id="talentCards"></div>
+        </div>
+
+        <div id="gameOverScreen" class="hidden">
+            <h2>游戏结束</h2>
+            <p id="finalStats" style="color:#aaa; font-size:18px; margin-bottom:20px;"></p>
+            <button class="btn" id="restartBtn">重新开始</button>
+        </div>
+
+        <div id="statusPanel" class="ui-panel hidden">
+            <div class="stat-row"><span>等级:</span><span id="levelText" style="color:#00ff88">1</span></div>
+            <div id="realmText">凡人</div>
+            <div id="expBar"><div id="expFill"></div></div>
+            <div class="stat-row" style="font-size:12px;color:#888;"><span id="expText">0/100</span></div>
+            <div id="hpBar"><div id="hpFill"></div></div>
+            <div class="stat-row" style="font-size:12px;color:#888;"><span id="hpText">100/100</span></div>
+            <hr style="border-color:#444; margin:10px 0;">
+            <div class="stat-row"><span>攻击:</span><span id="atkText">15</span></div>
+            <div class="stat-row"><span>防御:</span><span id="defText">5</span></div>
+            <div class="stat-row"><span>攻速:</span><span id="spdText">1.0</span></div>
+            <div class="stat-row"><span>吸血:</span><span id="lsText">0%</span></div>
+            <div class="stat-row"><span>CD 减免:</span><span id="cdrText">0%</span></div>
+        </div>
+
+        <div id="synergyPanel" class="ui-panel hidden">
+            <div style="color:#ffd700; font-weight:bold; margin-bottom:10px;">羁绊效果</div>
+            <div id="synergyList"></div>
+        </div>
+
+        <div id="skillPanel" class="ui-panel hidden">
+            <div id="skillSlots"></div>
+        </div>
+
+        <div id="levelupNotify" class="hidden">境界突破!</div>
+    </div>
+
+    <script>
+        const HEROES = [
+            {id:'h01',name:'枪手',type:'agility',avatar:'🤠',desc:'远程攻击，高攻速',baseStats:{hp:80,atk:15,spd:1.2,range:200},skills:['quick_shot','piercing_shot','trap']},
+            {id:'h02',name:'魔剑士',type:'magic',avatar:'🧙',desc:'魔法近战，平衡型',baseStats:{hp:100,atk:18,spd:1.0,range:60},skills:['magic_strike','lightning','cleave']},
+            {id:'h03',name:'狂战士',type:'power',avatar:'👹',desc:'高血量，高伤害',baseStats:{hp:150,atk:22,spd:0.8,range:50},skills:['whirlwind','shield_bash','combo_strike']},
+            {id:'h04',name:'刺客',type:'agility',avatar:'🥷',desc:'高暴击，高闪避',baseStats:{hp:70,atk:25,spd:1.3,range:50},skills:['backstab','quick_shot','trap']},
+            {id:'h05',name:'法师',type:'magic',avatar:'🧝',desc:'远程魔法，高伤害',baseStats:{hp:60,atk:30,spd:0.9,range:250},skills:['fireball','meteor','lightning']},
+            {id:'h06',name:'骑士',type:'power',avatar:'🛡️',desc:'高防御，稳定输出',baseStats:{hp:180,atk:16,spd:0.7,range:50},skills:['shield_bash','cleave','whirlwind']},
+            {id:'h07',name:'弓箭手',type:'agility',avatar:'🏹',desc:'超远射程，精准打击',baseStats:{hp:75,atk:20,spd:1.1,range:300},skills:['quick_shot','piercing_shot','backstab']},
+            {id:'h08',name:'术士',type:'magic',avatar:'🧛',desc:'持续伤害，吸血',baseStats:{hp:85,atk:24,spd:0.85,range:180},skills:['curse','fireball','lightning']},
+            {id:'h09',name:'武僧',type:'power',avatar:'👊',desc:'连击，高攻速',baseStats:{hp:120,atk:18,spd:1.1,range:45},skills:['combo_strike','whirlwind','cleave']},
+            {id:'h10',name:'猎人',type:'agility',avatar:'🎯',desc:'陷阱，控制敌人',baseStats:{hp:90,atk:19,spd:1.0,range:220},skills:['trap','piercing_shot','quick_shot']},
+        ];
+
+        const SKILLS = {
+            whirlwind: {id:'whirlwind',name:'旋风斩',type:'power',icon:'🌪️',damage:80,cd:2,range:80,area:100},
+            shield_bash: {id:'shield_bash',name:'盾击',type:'power',icon:'🛡️',damage:120,cd:3,range:60,area:60},
+            combo_strike: {id:'combo_strike',name:'连击',type:'power',icon:'👊',damage:50,cd:1,range:50,area:50},
+            cleave: {id:'cleave',name:'顺劈斩',type:'power',icon:'⚔️',damage:100,cd:2.5,range:70,area:90},
+            fireball: {id:'fireball',name:'火球术',type:'magic',icon:'🔥',damage:100,cd:1.5,range:250,area:70},
+            magic_strike: {id:'magic_strike',name:'魔法打击',type:'magic',icon:'✨',damage:70,cd:1.2,range:80,area:60},
+            curse: {id:'curse',name:'诅咒',type:'magic',icon:'💀',damage:40,cd:0.8,range:200,area:50},
+            lightning: {id:'lightning',name:'闪电链',type:'magic',icon:'⚡',damage:60,cd:1.8,range:220,area:80},
+            meteor: {id:'meteor',name:'流星',type:'magic',icon:'☄️',damage:150,cd:4,range:280,area:100},
+            quick_shot: {id:'quick_shot',name:'快速射击',type:'agility',icon:'🏹',damage:40,cd:0.5,range:250,area:40},
+            backstab: {id:'backstab',name:'背刺',type:'agility',icon:'🗡️',damage:200,cd:3,range:50,area:40},
+            piercing_shot: {id:'piercing_shot',name:'穿透射击',type:'agility',icon:'🎯',damage:80,cd:2,range:300,area:40},
+            trap: {id:'trap',name:'陷阱',type:'agility',icon:'🕸️',damage:60,cd:2.5,range:150,area:80},
+        };
+
+        const SYNERGIES = {
+            power:{2:{name:'力量共鸣',desc:'吸血 +5%',effect:{lifesteal:0.05}},4:{name:'力量觉醒',desc:'吸血 +10%, 血量 +15%',effect:{lifesteal:0.1,hp:0.15}},6:{name:'力量之王',desc:'吸血 +15%, 血量 +30%',effect:{lifesteal:0.15,hp:0.3}}},
+            magic:{2:{name:'魔法共鸣',desc:'技能 CD-10%',effect:{cdReduction:0.1}},4:{name:'魔法觉醒',desc:'技能 CD-20%, 攻速 +20%',effect:{cdReduction:0.2,atkSpd:0.2}},6:{name:'魔法之神',desc:'技能 CD-30%, 攻速 +40%',effect:{cdReduction:0.3,atkSpd:0.4}}},
+            agility:{2:{name:'敏捷共鸣',desc:'攻速 +15%',effect:{atkSpd:0.15}},4:{name:'敏捷觉醒',desc:'攻速 +30%, 血量 +10%',effect:{atkSpd:0.3,hp:0.1}},6:{name:'敏捷之神',desc:'攻速 +50%, 血量 +20%',effect:{atkSpd:0.5,hp:0.2}}},
+        };
+
+        const TALENTS = [
+            {id:'t1',name:'经验汲取',desc:'经验获取 +20%',effect:{expGain:0.2}},
+            {id:'t2',name:'悟性超凡',desc:'经验获取 +30%',effect:{expGain:0.3}},
+            {id:'t3',name:'天行健',desc:'技能 CD-15%',effect:{cdReduction:0.15}},
+            {id:'t4',name:'神行百变',desc:'攻速 +25%',effect:{atkSpd:0.25}},
+            {id:'t5',name:'血海深仇',desc:'吸血 +8%',effect:{lifesteal:0.08}},
+            {id:'t6',name:'金刚不坏',desc:'最大血量 +25%',effect:{hp:0.25}},
+            {id:'t7',name:'雷霆万钧',desc:'技能伤害 +20%',effect:{damage:0.2}},
+            {id:'t8',name:'毁天灭地',desc:'技能伤害 +30%, 范围 +15%',effect:{damage:0.3,range:0.15}},
+            {id:'t9',name:'仙风道骨',desc:'技能范围 +25%',effect:{range:0.25}},
+            {id:'t10',name:'生生不息',desc:'吸血 +5%, 经验 +15%',effect:{lifesteal:0.05,expGain:0.15}},
+        ];
+
+        const REALMS = ['凡人','炼气','筑基','金丹','元婴','化神','合体','大乘','渡劫','真仙'];
+        const MONSTER_TYPES = [
+            {id:'m1',name:'史莱姆',hp:30,atk:5,speed:1,color:'#00ff00',exp:10},
+            {id:'m2',name:'蝙蝠',hp:20,atk:8,speed:1.5,color:'#8b4513',exp:15},
+            {id:'m3',name:'骷髅',hp:50,atk:10,speed:0.8,color:'#cccccc',exp:20},
+            {id:'m4',name:'僵尸',hp:80,atk:12,speed:0.6,color:'#2d5a27',exp:30},
+            {id:'m5',name:'恶魔',hp:100,atk:15,speed:1,color:'#8b0000',exp:40},
+            {id:'m6',name:'兽人',hp:120,atk:18,speed:0.9,color:'#8b4513',exp:50},
+        ];
+
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.damageContainer = document.getElementById('damageNumbers');
+                this.state = 'start';
+                this.lastTime = 0;
+                this.player = null;
+                this.hero = null;
+                this.skills = [];
+                this.talents = [];
+                this.enemies = [];
+                this.projectiles = [];
+                this.mapWidth = 2000;
+                this.mapHeight = 2000;
+                this.cameraX = 0;
+                this.cameraY = 0;
+                this.keys = {};
+                this.spawnTimer = 0;
+                this.spawnInterval = 1000;
+                this.setupInput();
+                this.setupButtons();
+                this.gameLoop = this.gameLoop.bind(this);
+                requestAnimationFrame(this.gameLoop);
+            }
+
+            setupInput() {
+                window.addEventListener('keydown', (e) => {
+                    this.keys[e.key.toLowerCase()] = true;
+                    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+                });
+                window.addEventListener('keyup', (e) => { this.keys[e.key.toLowerCase()] = false; });
+            }
+
+            setupButtons() {
+                document.getElementById('startBtn').addEventListener('click', () => this.showHeroSelect());
+                document.getElementById('restartBtn').addEventListener('click', () => location.reload());
+            }
+
+            showHeroSelect() {
+                document.getElementById('startScreen').classList.add('hidden');
+                document.getElementById('heroSelectScreen').classList.remove('hidden');
+                const shuffled = [...HEROES].sort(() => Math.random() - 0.5).slice(0, 5);
+                document.getElementById('heroCards').innerHTML = shuffled.map(hero => `
+                    <div class="hero-card" data-id="${hero.id}">
+                        <div class="hero-avatar">${hero.avatar}</div>
+                        <div class="hero-name">${hero.name}</div>
+                        <div class="hero-type">${this.getTypeName(hero.type)}</div>
+                        <div class="hero-desc">${hero.desc}</div>
+                        <div class="hero-stats">HP:${hero.baseStats.hp} ATK:${hero.baseStats.atk} SPD:${hero.baseStats.spd}</div>
+                    </div>
+                `).join('');
+                document.querySelectorAll('.hero-card').forEach(card => {
+                    card.addEventListener('click', () => this.selectHero(card.dataset.id));
+                });
+                this.state = 'heroSelect';
+            }
+
+            getTypeName(type) { return {power:'力量',magic:'魔法',agility:'敏捷'}[type] || type; }
+
+            selectHero(heroId) {
+                this.hero = HEROES.find(h => h.id === heroId);
+                this.player = {
+                    x: this.mapWidth/2, y: this.mapHeight/2,
+                    level: 1, exp: 0, expToNext: 100,
+                    hp: this.hero.baseStats.hp, maxHp: this.hero.baseStats.hp,
+                    atk: this.hero.baseStats.atk, def: 5,
+                    atkSpd: this.hero.baseStats.spd, range: this.hero.baseStats.range,
+                    damageBonus: 0, lifesteal: 0, cdReduction: 0, expBonus: 0,
+                };
+                const skillIds = this.hero.skills || ['quick_shot','fireball','whirlwind'];
+                this.skills = skillIds.map(id => ({...SKILLS[id], currentCd: 0}));
+                document.getElementById('heroSelectScreen').classList.add('hidden');
+                document.getElementById('statusPanel').classList.remove('hidden');
+                document.getElementById('skillPanel').classList.remove('hidden');
+                document.getElementById('synergyPanel').classList.remove('hidden');
+                this.state = 'playing';
+                this.updateUI();
+            }
+
+            updateUI() {
+                if (!this.player) return;
+                const realm = REALMS[Math.min(Math.floor(this.player.level/10), REALMS.length-1)];
+                document.getElementById('levelText').textContent = this.player.level;
+                document.getElementById('realmText').textContent = realm;
+                document.getElementById('expText').textContent = Math.floor(this.player.exp)+'/'+this.player.expToNext;
+                document.getElementById('expFill').style.width = (this.player.exp/this.player.expToNext)*100+'%';
+                document.getElementById('hpText').textContent = Math.ceil(this.player.hp)+'/'+this.player.maxHp;
+                document.getElementById('hpFill').style.width = (this.player.hp/this.player.maxHp)*100+'%';
+                document.getElementById('atkText').textContent = this.player.atk;
+                document.getElementById('defText').textContent = this.player.def;
+                document.getElementById('spdText').textContent = this.player.atkSpd.toFixed(2);
+                document.getElementById('lsText').textContent = (this.player.lifesteal*100).toFixed(0)+'%';
+                document.getElementById('cdrText').textContent = (this.player.cdReduction*100).toFixed(0)+'%';
+                document.getElementById('skillSlots').innerHTML = this.skills.map(skill => {
+                    const isReady = skill.currentCd <= 0;
+                    return '<div class="skill-slot '+ (isReady?'ready':'cooldown') +'"><span class="skill-icon">'+skill.icon+'</span><span>'+skill.name+'</span>'+(isReady?'':'<div class="cd-overlay">'+skill.currentCd.toFixed(1)+'</div>')+'</div>';
+                }).join('');
+                this.updateSynergies();
+            }
+
+            updateSynergies() {
+                const typeCount = {power:0,magic:0,agility:0};
+                this.skills.forEach(s => { if(typeCount[s.type]!==undefined) typeCount[s.type]++; });
+                document.getElementById('synergyList').innerHTML = Object.entries(typeCount).map(([type,count]) => {
+                    if (count === 0) return '';
+                    const synergy = SYNERGIES[type];
+                    const tiers = [2,4,6].filter(t => t <= count);
+                    const maxTier = tiers.pop();
+                    return '<div class="synergy-item synergy-active"><div style="color:#ffd700">'+this.getTypeName(type)+' x'+count+'</div><div>'+synergy[maxTier].name+': '+synergy[maxTier].desc+'</div></div>';
+                }).join('');
+            }
+
+            showTalentSelect() {
+                this.state = 'talentSelect';
+                document.getElementById('talentSelectScreen').classList.remove('hidden');
+                document.getElementById('levelupNotify').classList.remove('hidden');
+                const selected = [...TALENTS].sort(() => Math.random() - 0.5).slice(0, 3);
+                document.getElementById('talentCards').innerHTML = selected.map(talent => `
+                    <div class="talent-card" data-id="${talent.id}">
+                        <div class="talent-name">${talent.name}</div>
+                        <div class="talent-desc">${talent.desc}</div>
+                    </div>
+                `).join('');
+                document.querySelectorAll('.talent-card').forEach(card => {
+                    card.addEventListener('click', () => this.selectTalent(card.dataset.id));
+                });
+                setTimeout(() => document.getElementById('levelupNotify').classList.add('hidden'), 2000);
+            }
+
+            selectTalent(talentId) {
+                const talent = TALENTS.find(t => t.id === talentId);
+                this.talents.push(talent);
+                this.applyTalentEffect(talent.effect);
+                document.getElementById('talentSelectScreen').classList.add('hidden');
+                this.state = 'playing';
+                this.updateUI();
+            }
+
+            applyTalentEffect(effect) {
+                if (!this.player) return;
+                if (effect.expGain) this.player.expBonus += effect.expGain;
+                if (effect.cdReduction) this.player.cdReduction += effect.cdReduction;
+                if (effect.atkSpd) this.player.atkSpd *= (1 + effect.atkSpd);
+                if (effect.lifesteal) this.player.lifesteal += effect.lifesteal;
+                if (effect.hp) { this.player.maxHp *= (1 + effect.hp); this.player.hp *= (1 + effect.hp); }
+                if (effect.damage) this.player.damageBonus += effect.damage;
+                if (effect.range) this.player.range *= (1 + effect.range);
+            }
+
+            spawnEnemy() {
+                const maxType = Math.min(Math.floor(this.player.level/5)+1, MONSTER_TYPES.length-1);
+                const type = MONSTER_TYPES[Math.floor(Math.random()*(maxType+1))];
+                const side = Math.floor(Math.random()*4);
+                let x, y, margin = 100;
+                switch(side) {
+                    case 0: x=this.cameraX+Math.random()*this.canvas.width; y=this.cameraY-margin; break;
+                    case 1: x=this.cameraX+this.canvas.width+margin; y=this.cameraY+Math.random()*this.canvas.height; break;
+                    case 2: x=this.cameraX+Math.random()*this.canvas.width; y=this.cameraY+this.canvas.height+margin; break;
+                    case 3: x=this.cameraX-margin; y=this.cameraY+Math.random()*this.canvas.height; break;
+                }
+                this.enemies.push({...type, x, y, maxHp:type.hp*(1+this.player.level*0.1), currentHp:type.hp*(1+this.player.level*0.1)});
+            }
+
+            update(delta) {
+                if (this.state !== 'playing') return;
+                const speed = 200;
+                if (this.keys['w']||this.keys['arrowup']) this.player.y -= speed*delta;
+                if (this.keys['s']||this.keys['arrowdown']) this.player.y += speed*delta;
+                if (this.keys['a']||this.keys['arrowleft']) this.player.x -= speed*delta;
+                if (this.keys['d']||this.keys['arrowright']) this.player.x += speed*delta;
+                this.player.x = Math.max(0, Math.min(this.mapWidth, this.player.x));
+                this.player.y = Math.max(0, Math.min(this.mapHeight, this.player.y));
+                this.cameraX = this.player.x - this.canvas.width/2;
+                this.cameraY = this.player.y - this.canvas.height/2;
+                this.spawnTimer += delta*1000;
+                const adjustedSpawnRate = Math.max(200, this.spawnInterval - this.player.level*20);
+                if (this.spawnTimer >= adjustedSpawnRate && this.enemies.length < 50+this.player.level*5) {
+                    this.spawnEnemy();
+                    this.spawnTimer = 0;
+                }
+                this.skills.forEach(skill => {
+                    if (skill.currentCd > 0) {
+                        skill.currentCd -= delta * (1 - this.player.cdReduction);
+                        if (skill.currentCd < 0) skill.currentCd = 0;
+                    }
+                });
+                this.autoAttack();
+                this.projectiles.forEach(proj => { proj.x += proj.vx*delta; proj.y += proj.vy*delta; proj.life -= delta; });
+                this.projectiles = this.projectiles.filter(p => p.life > 0);
+                this.enemies.forEach(enemy => {
+                    const dx = this.player.x - enemy.x, dy = this.player.y - enemy.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist > 0) { enemy.x += (dx/dist)*enemy.speed*50*delta; enemy.y += (dy/dist)*enemy.speed*50*delta; }
+                    if (dist < 30) { const damage = Math.max(1, enemy.atk - this.player.def); this.player.hp -= damage*delta; }
+                });
+                this.projectiles.forEach(proj => {
+                    this.enemies.forEach(enemy => {
+                        const dx = proj.x - enemy.x, dy = proj.y - enemy.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < proj.area + 20) {
+                            const damage = proj.damage * (1 + this.player.damageBonus);
+                            enemy.currentHp -= damage;
+                            this.showDamageNumber(damage, enemy.x, enemy.y);
+                            if (this.player.lifesteal > 0) this.player.hp = Math.min(this.player.maxHp, this.player.hp + damage*this.player.lifesteal);
+                            proj.hit = true;
+                        }
+                    });
+                });
+                this.enemies = this.enemies.filter(enemy => { if (enemy.currentHp <= 0) { this.gainExp(enemy.exp); return false; } return true; });
+                if (this.player.hp <= 0) this.gameOver();
+            }
+
+            autoAttack() {
+                this.skills.forEach(skill => {
+                    if (skill.currentCd <= 0) {
+                        const target = this.findNearestEnemy(skill.range);
+                        if (target) { this.useSkill(skill, target); skill.currentCd = skill.cd / this.player.atkSpd; }
+                    }
+                });
+            }
+
+            findNearestEnemy(range) {
+                let nearest = null, nearestDist = range;
+                this.enemies.forEach(enemy => {
+                    const dx = enemy.x - this.player.x, dy = enemy.y - this.player.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < nearestDist) { nearestDist = dist; nearest = enemy; }
+                });
+                return nearest;
+            }
+
+            useSkill(skill, target) {
+                const dx = target.x - this.player.x, dy = target.y - this.player.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist > 0) {
+                    this.projectiles.push({ x: this.player.x, y: this.player.y, vx: (dx/dist)*300, vy: (dy/dist)*300, damage: skill.damage, area: skill.area, life: 3, hit: false });
+                }
+            }
+
+            showDamageNumber(damage, x, y) {
+                const el = document.createElement('div');
+                el.className = 'damage-number';
+                el.textContent = Math.floor(damage);
+                el.style.left = (x - this.cameraX) + 'px';
+                el.style.top = (y - this.cameraY) + 'px';
+                el.style.color = '#ff0';
+                this.damageContainer.appendChild(el);
+                setTimeout(() => el.remove(), 1000);
+            }
+
+            gainExp(amount) {
+                if (!this.player) return;
+                this.player.exp += amount * (1 + this.player.expBonus);
+                while (this.player.exp >= this.player.expToNext) {
+                    this.player.exp -= this.player.expToNext;
+                    this.player.level++;
+                    this.player.expToNext = Math.floor(this.player.expToNext * 1.2);
+                    this.player.maxHp += 5;
+                    this.player.hp = this.player.maxHp;
+                    this.player.atk += 2;
+                    if (this.player.level % 10 === 0) this.showTalentSelect();
+                }
+                this.updateUI();
+            }
+
+            render() {
+                this.ctx.fillStyle = '#2d5a27';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                this.ctx.lineWidth = 1;
+                const gridSize = 50;
+                const offsetX = -this.cameraX % gridSize, offsetY = -this.cameraY % gridSize;
+                for (let x = offsetX; x < this.canvas.width; x += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); this.ctx.stroke(); }
+                for (let y = offsetY; y < this.canvas.height; y += gridSize) { this.ctx.beginPath(); this.ctx.moveTo(0, y); this.ctx.lineTo(this.canvas.width, y); this.ctx.stroke(); }
+                if (this.player) {
+                    const sx = this.player.x - this.cameraX, sy = this.player.y - this.cameraY;
+                    this.ctx.fillStyle = '#00ff88';
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 20, 0, Math.PI*2); this.ctx.fill();
+                    this.ctx.strokeStyle = '#00ff88'; this.ctx.lineWidth = 3;
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 25, 0, Math.PI*2); this.ctx.stroke();
+                }
+                this.enemies.forEach(enemy => {
+                    const sx = enemy.x - this.cameraX, sy = enemy.y - this.cameraY;
+                    if (sx < -30 || sx > this.canvas.width+30 || sy < -30 || sy > this.canvas.height+30) return;
+                    this.ctx.fillStyle = enemy.color;
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 15, 0, Math.PI*2); this.ctx.fill();
+                    const hpPercent = enemy.currentHp / enemy.maxHp;
+                    this.ctx.fillStyle = '#333'; this.ctx.fillRect(sx-15, sy-25, 30, 4);
+                    this.ctx.fillStyle = hpPercent > 0.5 ? '#0f0' : hpPercent > 0.25 ? '#ff0' : '#f00';
+                    this.ctx.fillRect(sx-15, sy-25, 30*hpPercent, 4);
+                });
+                this.projectiles.forEach(proj => {
+                    const sx = proj.x - this.cameraX, sy = proj.y - this.cameraY;
+                    this.ctx.fillStyle = '#ff0';
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 8, 0, Math.PI*2); this.ctx.fill();
+                    this.ctx.strokeStyle = '#ff8800'; this.ctx.lineWidth = 2;
+                    this.ctx.beginPath(); this.ctx.arc(sx, sy, 12, 0, Math.PI*2); this.ctx.stroke();
+                });
+            }
+
+            gameOver() {
+                this.state = 'gameOver';
+                document.getElementById('gameOverScreen').classList.remove('hidden');
+                document.getElementById('finalStats').innerHTML = '等级：'+this.player.level+' | 境界：'+REALMS[Math.floor(this.player.level/10)];
+            }
+
+            gameLoop(timestamp) {
+                const delta = Math.min((timestamp - this.lastTime) / 1000, 0.1);
+                this.lastTime = timestamp;
+                this.update(delta);
+                this.render();
+                requestAnimationFrame(this.gameLoop);
+            }
+        }
+
+        let game;
+        window.addEventListener('DOMContentLoaded', () => { game = new Game(); });
+    </script>
+</body>
+</html>
