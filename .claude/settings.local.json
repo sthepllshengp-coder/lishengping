@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Read(//Users/lishengping/星星之火/Assets/Scripts/Inventory/**)"
+      "Read(//Users/lishengping/星星之火/Assets/Scripts/Inventory/**)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
