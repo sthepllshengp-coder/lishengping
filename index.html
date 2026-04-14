@@ -1045,7 +1045,7 @@
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            transition: opacity 0.5s, visibility 0.5s;
+            transition: opacity 0.3s, visibility 0.3s;
         }
 
         .loader.hidden {
@@ -1059,8 +1059,8 @@
 
         .loader-logo {
             font-size: 4rem;
-            margin-bottom: 1.5rem;
-            animation: pulse-logo 1.5s infinite;
+            margin-bottom: 1rem;
+            animation: pulse-logo 1s infinite;
         }
 
         @keyframes pulse-logo {
@@ -1069,8 +1069,8 @@
         }
 
         .loader-bar {
-            width: 200px;
-            height: 3px;
+            width: 150px;
+            height: 2px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50px;
             overflow: hidden;
@@ -1080,15 +1080,15 @@
         .loader-bar::after {
             content: '';
             display: block;
-            width: 50%;
+            width: 30%;
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            animation: loading 1.5s infinite;
+            animation: loading 0.8s infinite;
         }
 
         @keyframes loading {
             0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
+            100% { transform: translateX(333%); }
         }
     </style>
 </head>
@@ -1333,11 +1333,11 @@
     </div>
 
     <script>
-        // 页面加载动画
+        // 页面加载动画 - 快速消失
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
-            }, 1000);
+            }, 300);
         });
 
         // 图片加载优化 - 只预加载前两张图片
