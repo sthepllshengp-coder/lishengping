@@ -43,7 +43,6 @@
 
         html {
             scroll-behavior: smooth;
-            cursor: none;
         }
 
         body {
@@ -52,39 +51,6 @@
             color: var(--dark);
             line-height: 1.7;
             overflow-x: hidden;
-            cursor: none;
-        }
-
-        /* 自定义光标 */
-        .cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-dot {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: var(--primary);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor.hover {
-            width: 40px;
-            height: 40px;
-            background: rgba(99, 102, 241, 0.1);
-            border-color: var(--secondary);
         }
 
         /* 粒子背景 */
@@ -465,7 +431,6 @@
             color: var(--dark-light);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(99, 102, 241, 0.1);
-            cursor: none;
         }
 
         .skill-tag:hover {
@@ -494,7 +459,6 @@
             overflow: hidden;
             box-shadow: var(--shadow-md);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: none;
             position: relative;
         }
 
@@ -564,7 +528,6 @@
             border-radius: 50px;
             font-weight: 600;
             font-size: 1rem;
-            cursor: none;
             transform: translateY(20px);
             transition: all 0.4s;
         }
@@ -642,7 +605,6 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: none;
             position: relative;
             overflow: hidden;
         }
@@ -733,7 +695,6 @@
             border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.4s;
-            cursor: none;
         }
 
         .contact-item:hover {
@@ -770,7 +731,6 @@
             font-size: 1.5rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            cursor: none;
         }
 
         .social-link:hover {
@@ -846,18 +806,6 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
-            html {
-                cursor: auto;
-            }
-
-            body, .skill-tag, .service-card, .contact-item, .social-link, .cursor, .cursor-dot {
-                cursor: auto;
-            }
-
-            .cursor, .cursor-dot {
-                display: none;
-            }
-
             .nav-links {
                 display: none;
             }
@@ -958,10 +906,6 @@
             <div class="loader-bar"></div>
         </div>
     </div>
-
-    <!-- 自定义光标 -->
-    <div class="cursor" id="cursor"></div>
-    <div class="cursor-dot" id="cursor-dot"></div>
 
     <!-- 粒子背景 -->
     <div class="particles" id="particles"></div>
@@ -1211,26 +1155,6 @@
                 document.getElementById('loader').classList.add('hidden');
             }, 1000);
         });
-
-        // 自定义光标
-        const cursor = document.getElementById('cursor');
-        const cursorDot = document.getElementById('cursor-dot');
-
-        if (window.matchMedia('(min-width: 769px)').matches) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                cursorDot.style.left = e.clientX + 'px';
-                cursorDot.style.top = e.clientY + 'px';
-            });
-
-            // 悬停效果
-            const hoverElements = document.querySelectorAll('a, button, .skill-tag, .portfolio-item, .service-card, .contact-item, .social-link');
-            hoverElements.forEach(el => {
-                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
-            });
-        }
 
         // 粒子背景
         function createParticles() {
