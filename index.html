@@ -474,6 +474,24 @@
             object-fit: cover;
             transform: scale(1.1);
             transition: transform 8s ease;
+            will-change: transform;
+        }
+
+        /* 图片加载占位符 */
+        .slide-image {
+            background: linear-gradient(90deg, #1a1a3e 25%, #2d2d5a 50%, #1a1a3e 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1s infinite;
+        }
+
+        .slide-image.loaded {
+            animation: none;
+            background: none;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
         }
 
         .slide.active .slide-image {
@@ -1165,7 +1183,7 @@
         <div class="portfolio-slider" id="portfolioSlider">
             <!-- 作品 1 -->
             <div class="slide active">
-                <img src="images/美妆品牌旗舰店首页/精华.png" alt="美妆品牌旗舰店首页" class="slide-image">
+                <img src="images/美妆品牌旗舰店首页/精华.png" alt="美妆品牌旗舰店首页" class="slide-image" loading="eager">
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>美妆品牌旗舰店首页</h3>
@@ -1180,7 +1198,7 @@
 
             <!-- 作品 2 -->
             <div class="slide">
-                <img src="images/3C 数码产品详情页/耳机.png" alt="3C 数码产品详情页" class="slide-image">
+                <img src="images/3C 数码产品详情页/耳机.png" alt="3C 数码产品详情页" class="slide-image" loading="lazy">
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>3C 数码产品详情页</h3>
@@ -1195,7 +1213,7 @@
 
             <!-- 作品 3 -->
             <div class="slide">
-                <img src="images/双 11 大促活动页面/1.png" alt="双 11 大促活动页面" class="slide-image">
+                <img src="images/双 11 大促活动页面/1.png" alt="双 11 大促活动页面" class="slide-image" loading="lazy">
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>双 11 大促活动页面</h3>
@@ -1322,10 +1340,29 @@
             }, 1000);
         });
 
-        // 粒子背景
+        // 图片加载优化 - 只预加载前两张图片
+        function preloadImages() {
+            const images = document.querySelectorAll('.slide-image');
+            images.forEach((img, index) => {
+                // 标记已加载的图片
+                img.addEventListener('load', () => {
+                    img.classList.add('loaded');
+                });
+
+                // 只预加载前两张图片，其余按需加载
+                if (index < 2) {
+                    const src = img.src;
+                    img.removeAttribute('src');
+                    img.src = src;
+                }
+            });
+        }
+        preloadImages();
+
+        // 粒子背景 - 减少粒子数量提升性能
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 30;
+            const particleCount = 20;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -1391,16 +1428,28 @@
         function nextSlide() {
             currentSlide = (currentSlide + 1) % slides.length;
             updateSlider();
+            preloadNextImage();
         }
 
         function prevSlide() {
             currentSlide = (currentSlide - 1 + slides.length) % slides.length;
             updateSlider();
+            preloadNextImage();
         }
 
         function goToSlide(index) {
             currentSlide = index;
             updateSlider();
+            preloadNextImage();
+        }
+
+        // 预加载下一张图片
+        function preloadNextImage() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            const nextImg = slides[nextIndex].querySelector('.slide-image');
+            if (nextImg && !nextImg.src) {
+                nextImg.src = nextImg.dataset.src || nextImg.getAttribute('data-src');
+            }
         }
 
         // 自动播放
