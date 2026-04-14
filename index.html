@@ -1333,11 +1333,9 @@
     </div>
 
     <script>
-        // 页面加载动画 - 快速消失
+        // 页面加载动画 - 立即消失
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 300);
+            document.getElementById('loader').classList.add('hidden');
         });
 
         // 图片加载优化 - 只预加载前两张图片
