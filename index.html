@@ -1090,6 +1090,99 @@
             transform: scale(1.2);
         }
 
+        /* 设计策略弹窗 */
+        .strategy-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .strategy-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .strategy-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            position: relative;
+            transform: translateY(30px);
+            transition: transform 0.3s;
+        }
+
+        .strategy-modal.active .strategy-content {
+            transform: translateY(0);
+        }
+
+        .strategy-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+            transition: color 0.3s;
+        }
+
+        .strategy-close:hover {
+            color: var(--dark);
+        }
+
+        .strategy-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .strategy-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .strategy-section h4 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strategy-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .strategy-section li {
+            padding: 0.5rem 0;
+            color: var(--gray);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .strategy-section li::before {
+            content: '•';
+            color: var(--primary);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-links {
@@ -1203,6 +1296,7 @@
             <li><a href="#home">首页</a></li>
             <li><a href="#about">关于</a></li>
             <li><a href="#portfolio">作品集</a></li>
+            <li><a href="#workflow">流程</a></li>
             <li><a href="#testimonials">评价</a></li>
             <li><a href="#contact">联系</a></li>
         </ul>
@@ -1250,8 +1344,35 @@
         <h2 class="section-title">关于我</h2>
         <p class="section-subtitle">About Me</p>
         <div class="about-content">
-            <p>你好！我是一名专业的电商设计师，拥有多年电商平台设计经验。我热衷于通过创新的视觉设计帮助品牌提升用户体验和销售转化。</p>
-            <p>我相信好的设计不仅仅是美观，更要能够解决商业问题，传达品牌价值，为用户创造愉悦的购物体验。每一个像素都承载着品牌的故事，每一次点击都应该是用户与品牌的美好对话。</p>
+            <p style="font-size: 1.15rem; color: var(--gray); margin-bottom: 1.5rem; line-height: 1.8;">
+                你好！我是一名专业的电商设计师，拥有<strong>5 年 + 电商平台设计经验</strong>。专注于通过<strong>数据驱动的视觉设计</strong>帮助品牌提升用户体验和销售转化。
+            </p>
+
+            <div style="background: white; border-radius: 16px; padding: 2rem; margin: 2rem 0; box-shadow: var(--shadow-md);">
+                <h4 style="text-align: center; margin-bottom: 1.5rem; color: var(--dark);">我的核心能力</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div style="padding: 1rem;">
+                        <strong style="color: var(--primary);">🏪 跨平台设计</strong>
+                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">淘宝/天猫、京东、拼多多、小红书等主流电商平台</p>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <strong style="color: var(--primary);">📊 数据优化</strong>
+                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">A/B 测试、转化率分析、用户行为研究</p>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <strong style="color: var(--primary);">🔗 全链路设计</strong>
+                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">从品牌视觉到落地页，从 PC 端到移动端响应式适配</p>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <strong style="color: var(--primary);">⚡ 快速交付</strong>
+                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">平均 3 天交付周期，支持紧急项目 24 小时出稿</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 1.1rem; color: var(--gray); margin-bottom: 2rem; line-height: 1.8;">
+                我相信好的设计不仅仅是美观，更要能够<strong>解决商业问题</strong>，传达品牌价值，为用户创造愉悦的购物体验。
+            </p>
             <div class="skills">
                 <span class="skill-tag">🏪 店铺首页设计</span>
                 <span class="skill-tag">📦 详情页设计</span>
@@ -1274,6 +1395,7 @@
                     <div class="tool-bar">
                         <div class="tool-progress" style="width: 0%" data-width="95%"></div>
                     </div>
+                    <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">主图精修、详情页合成、活动海报</p>
                 </div>
                 <div class="tool-item">
                     <div class="tool-info">
@@ -1283,6 +1405,7 @@
                     <div class="tool-bar">
                         <div class="tool-progress" style="width: 0%" data-width="90%"></div>
                     </div>
+                    <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">LOGO 设计、矢量图标、品牌 VI</p>
                 </div>
                 <div class="tool-item">
                     <div class="tool-info">
@@ -1292,6 +1415,7 @@
                     <div class="tool-bar">
                         <div class="tool-progress" style="width: 0%" data-width="85%"></div>
                     </div>
+                    <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">团队协作、原型设计、设计系统</p>
                 </div>
                 <div class="tool-item">
                     <div class="tool-info">
@@ -1301,6 +1425,7 @@
                     <div class="tool-bar">
                         <div class="tool-progress" style="width: 0%" data-width="75%"></div>
                     </div>
+                    <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">3D 产品展示、立体主图</p>
                 </div>
             </div>
         </div>
@@ -1315,21 +1440,25 @@
                 <div class="achievement-icon">📈</div>
                 <div class="achievement-value">35%+</div>
                 <div class="achievement-label">平均转化率提升</div>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">相比行业平均 20%</p>
             </div>
             <div class="achievement-card">
                 <div class="achievement-icon">🏆</div>
                 <div class="achievement-value">50+</div>
                 <div class="achievement-label">服务品牌数量</div>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">涵盖美妆/3C/母婴等</p>
             </div>
             <div class="achievement-card">
                 <div class="achievement-icon">⭐</div>
                 <div class="achievement-value">4.9</div>
                 <div class="achievement-label">客户满意度</div>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">5 分制评分</p>
             </div>
             <div class="achievement-card">
-                <div class="achievement-icon">⚡</div>
-                <div class="achievement-value">3 天</div>
-                <div class="achievement-label">平均交付周期</div>
+                <div class="achievement-icon">💰</div>
+                <div class="achievement-value">25%+</div>
+                <div class="achievement-label">客单价提升</div>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">通过关联销售设计</p>
             </div>
         </div>
     </section>
@@ -1355,6 +1484,7 @@
                         <span class="slide-tag">品牌视觉</span>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 42% | 停留时长 +1.5 分钟</p>
+                    <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(1)">📋 查看设计策略</button>
                 </div>
             </div>
 
@@ -1371,6 +1501,7 @@
                         <span class="slide-tag">卖点展示</span>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 转化率提升 38% | 加购率 +25%</p>
+                    <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(2)">📋 查看设计策略</button>
                 </div>
             </div>
 
@@ -1387,6 +1518,7 @@
                         <span class="slide-tag">双 11</span>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 GMV 破 500 万 | 转化率提升 55%</p>
+                    <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(3)">📋 查看设计策略</button>
                 </div>
             </div>
 
@@ -1403,6 +1535,7 @@
                         <span class="slide-tag">温馨风格</span>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 复购率提升 30% | 好评率 99%</p>
+                    <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(4)">📋 查看设计策略</button>
                 </div>
             </div>
 
@@ -1419,6 +1552,7 @@
                         <span class="slide-tag">创意合成</span>
                     </div>
                     <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 65% | 爆款打造</p>
+                    <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(5)">📋 查看设计策略</button>
                 </div>
             </div>
         </div>
@@ -1491,6 +1625,44 @@
         </div>
     </section>
 
+    <!-- 工作流程 -->
+    <section class="section" style="background: white;" id="workflow">
+        <h2 class="section-title">工作流程</h2>
+        <p class="section-subtitle">Workflow</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 2rem;">
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">1</div>
+                <strong style="color: var(--dark);">需求沟通</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">了解品牌与目标</p>
+            </div>
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">2</div>
+                <strong style="color: var(--dark);">竞品分析</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">研究市场与竞品</p>
+            </div>
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">3</div>
+                <strong style="color: var(--dark);">创意提案</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">输出设计方案</p>
+            </div>
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">4</div>
+                <strong style="color: var(--dark);">初稿设计</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">精细化视觉设计</p>
+            </div>
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">5</div>
+                <strong style="color: var(--dark);">A/B 测试</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">数据验证优化</p>
+            </div>
+            <div style="text-align: center; padding: 1.5rem; min-width: 150px;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 1rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">6</div>
+                <strong style="color: var(--dark);">最终交付</strong>
+                <p style="color: var(--gray); font-size: 0.85rem; margin-top: 0.5rem;">源文件与规范</p>
+            </div>
+        </div>
+    </section>
+
     <!-- 联系方式 -->
     <section class="section contact" id="contact">
         <h2 class="section-title">联系我</h2>
@@ -1527,6 +1699,15 @@
         <div class="lightbox-content">
             <button class="lightbox-close" onclick="closeLightbox()">×</button>
             <img src="" alt="" id="lightbox-img">
+        </div>
+    </div>
+
+    <!-- 设计策略弹窗 -->
+    <div class="strategy-modal" id="strategyModal">
+        <div class="strategy-content">
+            <button class="strategy-close" onclick="closeStrategy()">×</button>
+            <h3 class="strategy-title" id="strategyTitle">设计策略</h3>
+            <div id="strategyBody"></div>
         </div>
     </div>
 
@@ -1728,6 +1909,229 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeLightbox();
+            }
+        });
+
+        // 设计策略弹窗数据
+        const strategyData = {
+            1: {
+                title: '美妆品牌旗舰店首页设计策略',
+                content: `
+                    <div class="strategy-section">
+                        <h4>👥 用户画像分析</h4>
+                        <ul>
+                            <li>25-35 岁女性，注重品质与性价比</li>
+                            <li>关注成分安全与品牌口碑</li>
+                            <li>偏好清新自然的视觉风格</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>🔍 竞品调研</h4>
+                        <ul>
+                            <li>分析 TOP10 竞品视觉风格</li>
+                            <li>发现市场主流为极简风/INS 风</li>
+                            <li>差异化定位：轻奢优雅路线</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>💡 核心卖点提炼</h4>
+                        <ul>
+                            <li>突出产品差异化优势：天然成分</li>
+                            <li>强调品牌背书：XX 认证/专利配方</li>
+                            <li>营造高端感：金色 + 白色主色调</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>📐 视觉层次规划</h4>
+                        <ul>
+                            <li>F 型阅读路径设计</li>
+                            <li>首屏聚焦：品牌 LOGO+ 主推产品</li>
+                            <li>色彩心理学：紫色传递优雅与信任</li>
+                        </ul>
+                    </div>
+                `
+            },
+            2: {
+                title: '3C 数码产品详情页设计策略',
+                content: `
+                    <div class="strategy-section">
+                        <h4>👥 用户画像分析</h4>
+                        <ul>
+                            <li>18-35 岁男性为主，科技爱好者</li>
+                            <li>关注性能参数与使用体验</li>
+                            <li>决策理性，喜欢对比分析</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>🔍 竞品调研</h4>
+                        <ul>
+                            <li>分析同类目 TOP20 产品详情页</li>
+                            <li>发现痛点：参数展示混乱</li>
+                            <li>机会点：可视化参数对比</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>💡 核心卖点提炼</h4>
+                        <ul>
+                            <li>音质：Hi-Res 金标认证</li>
+                            <li>续航：40 小时超长待机</li>
+                            <li>降噪：主动降噪 45dB</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>📐 视觉层次规划</h4>
+                        <ul>
+                            <li>痛点场景引入 → 产品亮相</li>
+                            <li>核心卖点可视化展示</li>
+                            <li>参数对比表格 → 用户好评</li>
+                        </ul>
+                    </div>
+                `
+            },
+            3: {
+                title: '双 11 大促活动页面设计策略',
+                content: `
+                    <div class="strategy-section">
+                        <h4>👥 用户画像分析</h4>
+                        <ul>
+                            <li>价格敏感型用户为主</li>
+                            <li>冲动消费倾向明显</li>
+                            <li>时间紧迫感促进转化</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>🔍 竞品调研</h4>
+                        <ul>
+                            <li>分析往年双 11 爆款页面</li>
+                            <li>红色系为主，视觉冲击强</li>
+                            <li>差异化：紫色渐变 + 流光效果</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>💡 核心卖点提炼</h4>
+                        <ul>
+                            <li>限时折扣：前 N 件 X 折</li>
+                            <li>满减优惠：跨店满 300-50</li>
+                            <li>赠品策略：买一送 N</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>📐 视觉层次规划</h4>
+                        <ul>
+                            <li>倒计时模块制造紧迫感</li>
+                            <li>优惠信息醒目突出</li>
+                            <li>爆款产品轮播展示</li>
+                        </ul>
+                    </div>
+                `
+            },
+            4: {
+                title: '母婴用品店铺装修设计策略',
+                content: `
+                    <div class="strategy-section">
+                        <h4>👥 用户画像分析</h4>
+                        <ul>
+                            <li>25-40 岁宝妈群体</li>
+                            <li>关注安全性与实用性</li>
+                            <li>情感驱动型消费</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>🔍 竞品调研</h4>
+                        <ul>
+                            <li>市场主流：粉色/蓝色系</li>
+                            <li>视觉风格偏可爱路线</li>
+                            <li>差异化：温馨 + 专业感</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>💡 核心卖点提炼</h4>
+                        <ul>
+                            <li>安全认证：国标/欧标双重认证</li>
+                            <li>材质优势：纯棉/有机棉</li>
+                            <li>口碑背书：10 万 + 好评</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>📐 视觉层次规划</h4>
+                        <ul>
+                            <li>暖色调营造温馨感</li>
+                            <li>圆角元素传递亲和力</li>
+                            <li>场景图展示使用情境</li>
+                        </ul>
+                    </div>
+                `
+            },
+            5: {
+                title: '美食厨房主图设计策略',
+                content: `
+                    <div class="strategy-section">
+                        <h4>👥 用户画像分析</h4>
+                        <ul>
+                            <li>20-45 岁美食爱好者</li>
+                            <li>视觉驱动型消费</li>
+                            <li>冲动购买倾向高</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>🔍 竞品调研</h4>
+                        <ul>
+                            <li>分析同类目 TOP50 主图</li>
+                            <li>发现：实拍图点击率更高</li>
+                            <li>机会点：创意合成 + 食欲感</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>💡 核心卖点提炼</h4>
+                        <ul>
+                            <li>食材新鲜：原产地直供</li>
+                            <li>口感描述：外酥里嫩/爆浆</li>
+                            <li>便利性强：3 分钟即食</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-section">
+                        <h4>📐 视觉层次规划</h4>
+                        <ul>
+                            <li>高饱和度色彩激发食欲</li>
+                            <li>特写镜头展示质感</li>
+                            <li>蒸汽/酱汁等动态元素</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // 打开设计策略弹窗
+        function openStrategy(id) {
+            const modal = document.getElementById('strategyModal');
+            const title = document.getElementById('strategyTitle');
+            const body = document.getElementById('strategyBody');
+
+            const data = strategyData[id];
+            if (data) {
+                title.textContent = data.title;
+                body.innerHTML = data.content;
+                modal.classList.add('active');
+            }
+        }
+
+        // 关闭设计策略弹窗
+        function closeStrategy() {
+            const modal = document.getElementById('strategyModal');
+            modal.classList.remove('active');
+        }
+
+        // 点击背景关闭
+        document.getElementById('strategyModal').addEventListener('click', (e) => {
+            if (e.target.id === 'strategyModal') {
+                closeStrategy();
+            }
+        });
+
+        // ESC 键关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeStrategy();
             }
         });
 
