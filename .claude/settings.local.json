@@ -4,7 +4,11 @@
       "Read(//Users/lishengping/星星之火/Assets/Scripts/Inventory/**)",
       "Bash(git rm:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Read(//Users/lishengping/Desktop/苍玄大陆_网页版/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/lishengping/Desktop/苍玄大陆_网页版"
     ]
   }
 }
