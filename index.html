@@ -1417,44 +1417,6 @@
             font-weight: bold;
         }
 
-        /* PDF 加载提示 */
-        .pdf-loading-toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(18, 18, 26, 0.95);
-            backdrop-filter: blur(20px);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .pdf-loading-toast.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        .pdf-loading-toast::before {
-            content: '📄';
-            font-size: 1.25rem;
-        }
-
-        .pdf-loading-toast span {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
         /* 响应式 */
         @media (max-width: 768px) {
             .nav-links {
@@ -1487,13 +1449,6 @@
 
             .contact-info {
                 gap: 1.5rem;
-            }
-
-            /* PDF 加载提示移动端 */
-            .pdf-loading-toast {
-                bottom: 80px;
-                padding: 0.875rem 1.5rem;
-                max-width: 90%;
             }
 
             /* 作品集轮播移动端优化 */
@@ -1770,11 +1725,6 @@
         </div>
     </div>
 
-    <!-- PDF 加载提示 -->
-    <div class="pdf-loading-toast" id="pdfLoadingToast">
-        <span>正在加载简历，请稍候...</span>
-    </div>
-
     <!-- 粒子背景 -->
     <div class="particles" id="particles"></div>
 
@@ -1818,7 +1768,7 @@
                 </div>
             </div>
 
-            <a href="%E6%9D%8E%E5%8D%87%E5%B9%B3%E4%BD%9C%E5%93%81UI%E8%AE%BE%E8%AE%A1.pdf" class="cta-btn" id="pdfBtn" onclick="showPdfLoading()">📄 查看简历 PDF</a>
+            <a href="resume.html" class="cta-btn" id="pdfBtn">📄 查看简历</a>
         </div>
         <div class="scroll-indicator">
             <span>向下滚动</span>
@@ -2333,30 +2283,6 @@
                 loader.style.display = 'none';
             }
         }, 3000);
-
-        // PDF 加载提示
-        function showPdfLoading() {
-            const toast = document.getElementById('pdfLoadingToast');
-            toast.classList.add('active');
-
-            // 检测移动端
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-            if (isMobile) {
-                // 移动端：提示用户等待
-                setTimeout(() => {
-                    toast.classList.remove('active');
-                }, 5000);
-            } else {
-                // 桌面端：快速关闭
-                setTimeout(() => {
-                    toast.classList.remove('active');
-                }, 2000);
-            }
-
-            // 不阻止默认行为，让链接正常打开
-            return true;
-        }
 
         // 图片加载优化 - 标记已加载状态
         function initImageLoading() {
