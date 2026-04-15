@@ -1333,10 +1333,15 @@
     </div>
 
     <script>
-        // 页面加载动画 - 立即消失
-        window.addEventListener('load', () => {
+        // 页面加载动画 - DOM 就绪后立即消失
+        window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('loader').classList.add('hidden');
         });
+
+        // 如果 DOMContentLoaded 已经触发过，立即隐藏
+        if (document.readyState !== 'loading') {
+            document.getElementById('loader').classList.add('hidden');
+        }
 
         // 图片加载优化 - 只预加载前两张图片
         function preloadImages() {
