@@ -440,6 +440,98 @@
             color: var(--primary);
         }
 
+        /* 工具技能条 */
+        .tools-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .tools-section h4 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .tool-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .tool-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-name {
+            font-weight: 500;
+            color: var(--dark-light);
+        }
+
+        .tool-level {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tool-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .tool-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+
+        /* 成就数据 */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 3rem auto;
+        }
+
+        .achievement-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.3s;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .achievement-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .achievement-label {
+            color: var(--gray);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
         /* 作品集 - 全屏轮播 */
         .portfolio {
             background: #000;
@@ -1111,7 +1203,7 @@
             <li><a href="#home">首页</a></li>
             <li><a href="#about">关于</a></li>
             <li><a href="#portfolio">作品集</a></li>
-            <li><a href="#services">服务</a></li>
+            <li><a href="#testimonials">评价</a></li>
             <li><a href="#contact">联系</a></li>
         </ul>
     </nav>
@@ -1170,6 +1262,75 @@
                 <span class="skill-tag">📊 数据可视化</span>
                 <span class="skill-tag">✨ 图标设计</span>
             </div>
+
+            <!-- 工具技能 -->
+            <div class="tools-section">
+                <h4>🛠️ 设计工具熟练度</h4>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <span class="tool-name">Photoshop</span>
+                        <span class="tool-level">精通 95%</span>
+                    </div>
+                    <div class="tool-bar">
+                        <div class="tool-progress" style="width: 0%" data-width="95%"></div>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <span class="tool-name">Illustrator</span>
+                        <span class="tool-level">熟练 90%</span>
+                    </div>
+                    <div class="tool-bar">
+                        <div class="tool-progress" style="width: 0%" data-width="90%"></div>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <span class="tool-name">Figma</span>
+                        <span class="tool-level">熟练 85%</span>
+                    </div>
+                    <div class="tool-bar">
+                        <div class="tool-progress" style="width: 0%" data-width="85%"></div>
+                    </div>
+                </div>
+                <div class="tool-item">
+                    <div class="tool-info">
+                        <span class="tool-name">C4D / Blender</span>
+                        <span class="tool-level">进阶 75%</span>
+                    </div>
+                    <div class="tool-bar">
+                        <div class="tool-progress" style="width: 0%" data-width="75%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成就数据 -->
+    <section class="section" style="background: white;">
+        <h2 class="section-title">成果数据</h2>
+        <p class="section-subtitle">Achievements</p>
+        <div class="achievements-grid">
+            <div class="achievement-card">
+                <div class="achievement-icon">📈</div>
+                <div class="achievement-value">35%+</div>
+                <div class="achievement-label">平均转化率提升</div>
+            </div>
+            <div class="achievement-card">
+                <div class="achievement-icon">🏆</div>
+                <div class="achievement-value">50+</div>
+                <div class="achievement-label">服务品牌数量</div>
+            </div>
+            <div class="achievement-card">
+                <div class="achievement-icon">⭐</div>
+                <div class="achievement-value">4.9</div>
+                <div class="achievement-label">客户满意度</div>
+            </div>
+            <div class="achievement-card">
+                <div class="achievement-icon">⚡</div>
+                <div class="achievement-value">3 天</div>
+                <div class="achievement-label">平均交付周期</div>
+            </div>
         </div>
     </section>
 
@@ -1193,6 +1354,7 @@
                         <span class="slide-tag">美妆</span>
                         <span class="slide-tag">品牌视觉</span>
                     </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 42% | 停留时长 +1.5 分钟</p>
                 </div>
             </div>
 
@@ -1208,6 +1370,7 @@
                         <span class="slide-tag">3C 数码</span>
                         <span class="slide-tag">卖点展示</span>
                     </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 转化率提升 38% | 加购率 +25%</p>
                 </div>
             </div>
 
@@ -1223,6 +1386,7 @@
                         <span class="slide-tag">促销设计</span>
                         <span class="slide-tag">双 11</span>
                     </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 GMV 破 500 万 | 转化率提升 55%</p>
                 </div>
             </div>
 
@@ -1238,6 +1402,7 @@
                         <span class="slide-tag">母婴</span>
                         <span class="slide-tag">温馨风格</span>
                     </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 复购率提升 30% | 好评率 99%</p>
                 </div>
             </div>
 
@@ -1253,6 +1418,7 @@
                         <span class="slide-tag">食品</span>
                         <span class="slide-tag">创意合成</span>
                     </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 65% | 爆款打造</p>
                 </div>
             </div>
         </div>
@@ -1289,6 +1455,38 @@
                 <div class="service-icon">✨</div>
                 <h3>品牌视觉设计</h3>
                 <p>从 LOGO 到整体视觉规范，建立统一的品牌形象</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 客户评价 -->
+    <section class="section" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);" id="testimonials">
+        <h2 class="section-title">客户评价</h2>
+        <p class="section-subtitle">Testimonials</p>
+        <div class="services-grid">
+            <div class="service-card" style="cursor: default;">
+                <div class="service-icon">💬</div>
+                <p style="font-style: italic; margin-bottom: 1.5rem; line-height: 1.8;">"李设计师非常专业，不仅理解我们的品牌理念，还能将抽象的概念转化为具体的视觉语言。新首页上线后，我们的点击率提升了 40% 以上！"</p>
+                <div style="text-align: left; padding-left: 1rem; border-left: 3px solid var(--primary);">
+                    <strong style="color: var(--dark);">某美妆品牌 市场总监</strong>
+                    <p style="color: var(--gray); font-size: 0.9rem; margin-top: 0.25rem;">天猫旗舰店首页设计项目</p>
+                </div>
+            </div>
+            <div class="service-card" style="cursor: default;">
+                <div class="service-icon">💬</div>
+                <p style="font-style: italic; margin-bottom: 1.5rem; line-height: 1.8;">"详情页设计超出预期，把我们产品的卖点梳理得非常清晰。上线第一个月转化率就提升了 35%，客单价也有明显增长。"</p>
+                <div style="text-align: left; padding-left: 1rem; border-left: 3px solid var(--primary);">
+                    <strong style="color: var(--dark);">3C 数码品牌 创始人</strong>
+                    <p style="color: var(--gray); font-size: 0.9rem; margin-top: 0.25rem;">产品详情页设计项目</p>
+                </div>
+            </div>
+            <div class="service-card" style="cursor: default;">
+                <div class="service-icon">💬</div>
+                <p style="font-style: italic; margin-bottom: 1.5rem; line-height: 1.8;">"双 11 活动页面设计非常成功，营造出热烈的购物氛围。当天 GMV 突破 500 万，远超我们的目标。期待下次合作！"</p>
+                <div style="text-align: left; padding-left: 1rem; border-left: 3px solid var(--primary);">
+                    <strong style="color: var(--dark);">电商平台 运营经理</strong>
+                    <p style="color: var(--gray); font-size: 0.9rem; margin-top: 0.25rem;">双 11 大促活动页面项目</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1377,6 +1575,28 @@
             }
         }
         createParticles();
+
+        // 工具技能条动画
+        function animateToolSkills() {
+            const toolsSection = document.querySelector('.tools-section');
+            if (!toolsSection) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const progressBars = entry.target.querySelectorAll('.tool-progress');
+                        progressBars.forEach(bar => {
+                            const width = bar.getAttribute('data-width');
+                            bar.style.width = width;
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            observer.observe(toolsSection);
+        }
+        animateToolSkills();
 
         // 导航栏滚动效果
         window.addEventListener('scroll', () => {
