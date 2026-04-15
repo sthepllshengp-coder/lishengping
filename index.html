@@ -6,7 +6,13 @@
     <title>李升平 | 电商设计作品集</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Cormorant+Garamond:wght@600;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        /* 字体降级方案 */
+        @font-face {
+            font-family: 'SystemFallback';
+            src: local('PingFang SC'), local('Microsoft YaHei'), local('sans-serif');
+        }
     <style>
         * {
             margin: 0;
@@ -57,14 +63,14 @@
         }
 
         body {
-            font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'SystemFallback', sans-serif;
             background: var(--light);
             color: var(--dark);
-            line-height: 1.7;
+            line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* 粒子背景 */
+        /* 粒子背景 - 移动端禁用 */
         .particles {
             position: fixed;
             top: 0;
@@ -74,6 +80,13 @@
             pointer-events: none;
             z-index: 0;
             overflow: hidden;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .particles {
+                display: none;
+            }
         }
 
         .particle {
@@ -2324,29 +2337,28 @@
             return true;
         }
 
-        // 图片预加载优化
-        function preloadImages() {
+        // 图片加载优化 - 标记已加载状态
+        function initImageLoading() {
             const images = document.querySelectorAll('.slide-image');
             images.forEach((img, index) => {
-                // 标记已加载的图片
+                // 图片加载完成后移除动画
                 img.addEventListener('load', () => {
                     img.classList.add('loaded');
                 });
-
-                // 只预加载前两张图片，其余按需加载
-                if (index < 2) {
-                    const src = img.src;
-                    img.removeAttribute('src');
-                    img.src = src;
-                }
+                img.addEventListener('error', () => {
+                    console.log('Image failed to load:', img.src);
+                });
             });
         }
-        preloadImages();
+        initImageLoading();
 
-        // 粒子背景 - 减少粒子数量提升性能
+        // 粒子背景 - 移动端禁用
         function createParticles() {
+            // 移动端禁用粒子动画以提升性能
+            if (window.innerWidth < 768) return;
+
             const container = document.getElementById('particles');
-            const particleCount = 20;
+            const particleCount = 15;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
