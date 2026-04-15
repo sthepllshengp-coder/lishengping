@@ -6,7 +6,7 @@
     <title>李升平 | 电商设计作品集</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -39,6 +39,17 @@
             --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.12);
             --shadow-xl: 0 30px 90px rgba(0, 0, 0, 0.15);
             --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.4);
+
+            /* 高端配色 */
+            --gold: #D4AF37;
+            --gold-light: #E8C547;
+            --gold-dark: #B8962E;
+            --deep-navy: #12121A;
+            --charcoal: #1A1A2E;
+            --crimson: #DC143C;
+            --emerald: #2E8B57;
+            --text-primary: #F8F9FA;
+            --text-muted: #A0A0A0;
         }
 
         html {
@@ -46,7 +57,7 @@
         }
 
         body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--light);
             color: var(--dark);
             line-height: 1.7;
@@ -188,6 +199,18 @@
             animation: rotate-bg 30s linear infinite;
         }
 
+        /* 高端金色光晕效果 */
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
         @keyframes rotate-bg {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -267,14 +290,15 @@
 
         header h1 {
             font-size: 3.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #fff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            font-weight: 700;
+            font-family: 'Cormorant Garamond', 'Noto Sans SC', serif;
+            background: linear-gradient(135deg, #fff 0%, #f5e6c4 50%, #d4af37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 1rem;
-            letter-spacing: 3px;
-            text-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+            letter-spacing: 5px;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
         }
 
         header .tagline {
@@ -300,6 +324,7 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
+            font-family: 'Space Mono', 'Noto Sans SC', monospace;
             background: var(--gradient-gold);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -322,7 +347,7 @@
             border-radius: 50px;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
             border: none;
             position: relative;
@@ -336,13 +361,13 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+            transition: left 0.6s;
         }
 
         .cta-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(99, 102, 241, 0.6);
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.4);
         }
 
         .cta-btn:hover::before {
@@ -429,15 +454,32 @@
             box-shadow: var(--shadow-md);
             font-weight: 500;
             color: var(--dark-light);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             border: 1px solid rgba(99, 102, 241, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.1), transparent);
+            transition: width 0.4s;
         }
 
         .skill-tag:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-glow);
-            border-color: var(--primary);
-            color: var(--primary);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+            color: var(--gold-dark);
+        }
+
+        .skill-tag:hover::before {
+            width: 100%;
         }
 
         /* 工具技能条 */
@@ -505,11 +547,32 @@
             background: white;
             border-radius: 16px;
             box-shadow: var(--shadow-md);
-            transition: transform 0.3s;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .achievement-card:hover::before {
+            transform: scaleX(1);
         }
 
         .achievement-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
         }
 
         .achievement-icon {
@@ -530,6 +593,98 @@
             color: var(--gray);
             margin-top: 0.5rem;
             font-size: 0.95rem;
+        }
+
+        /* 客户信任徽章 */
+        .client-trust {
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .client-trust h3 {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--gold-dark);
+            margin-bottom: 2.5rem;
+            letter-spacing: 3px;
+        }
+
+        .brand-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .brand-logo {
+            padding: 1.5rem 2.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            font-weight: 600;
+            color: var(--dark);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .brand-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.25);
+            border-color: var(--gold);
+        }
+
+        /* 专业认证 */
+        .certifications {
+            padding: 4rem 5%;
+            background: white;
+        }
+
+        .certifications h3 {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--gold-dark);
+            margin-bottom: 2.5rem;
+            letter-spacing: 3px;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.3s;
+        }
+
+        .cert-item:hover {
+            transform: translateX(5px);
+            border-color: var(--gold);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .cert-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .cert-item span:last-child {
+            font-weight: 500;
+            color: var(--dark);
         }
 
         /* 作品集 - 全屏轮播 */
@@ -630,6 +785,66 @@
             color: rgba(255,255,255,0.9);
             margin-bottom: 1.5rem;
             line-height: 1.7;
+        }
+
+        /* 案例研究结构 */
+        .case-study-box {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+        }
+
+        .case-study-box h4 {
+            color: var(--gold);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .case-study-box p {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.85);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .case-metrics {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .case-metric {
+            flex: 1;
+            min-width: 80px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .case-metric .value {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+        }
+
+        .case-metric .label {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+            margin-top: 0.25rem;
+            display: block;
         }
 
         .slide-tags {
@@ -1230,13 +1445,37 @@
                 text-shadow: 0 2px 10px rgba(0,0,0,0.4);
             }
 
-            .slide-content p {
+            .case-study-box {
+                padding: 0.75rem;
+                margin: 0.5rem 0;
+            }
+
+            .case-study-box h4 {
+                font-size: 0.8rem;
+                margin-bottom: 0.35rem;
+            }
+
+            .case-study-box p {
+                font-size: 0.75rem;
+                line-height: 1.5;
+            }
+
+            .case-metrics {
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+            }
+
+            .case-metric {
+                min-width: 60px;
+                padding: 0.5rem;
+            }
+
+            .case-metric .value {
                 font-size: 0.9rem;
-                margin-bottom: 1rem;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
+            }
+
+            .case-metric .label {
+                font-size: 0.6rem;
             }
 
             .slide-tags {
@@ -1254,12 +1493,6 @@
                 padding: 0.65rem 1.5rem;
                 font-size: 0.85rem;
                 margin-top: 0.75rem !important;
-            }
-
-            /* 移动端隐藏指标文字 */
-            .slide-content p[style*="font-size: 0.9rem"][style*="margin-top: 1rem"] {
-                font-size: 0.75rem !important;
-                margin-top: 0.5rem !important;
             }
 
             /* 轮播控制按钮 */
@@ -1312,11 +1545,36 @@
                 margin-bottom: 0.5rem;
             }
 
-            .slide-content p {
-                font-size: 0.8rem;
-                margin-bottom: 0.75rem;
-                -webkit-line-clamp: 2;
-                line-clamp: 2;
+            .case-study-box {
+                padding: 0.5rem;
+                margin: 0.35rem 0;
+            }
+
+            .case-study-box h4 {
+                font-size: 0.7rem;
+                margin-bottom: 0.25rem;
+            }
+
+            .case-study-box p {
+                font-size: 0.65rem;
+                line-height: 1.4;
+            }
+
+            .case-metrics {
+                gap: 0.35rem;
+            }
+
+            .case-metric {
+                min-width: 50px;
+                padding: 0.35rem;
+            }
+
+            .case-metric .value {
+                font-size: 0.75rem;
+            }
+
+            .case-metric .label {
+                font-size: 0.55rem;
             }
 
             .slide-tags {
@@ -1326,11 +1584,6 @@
             .slide-tag {
                 padding: 0.25rem 0.65rem;
                 font-size: 0.7rem;
-            }
-
-            /* 移动端隐藏指标文字 */
-            .slide-content p[style*="font-size: 0.9rem"][style*="margin-top: 1rem"] {
-                display: none;
             }
 
             .slide-content .view-btn {
@@ -1364,6 +1617,24 @@
             .dot {
                 width: 8px;
                 height: 8px;
+            }
+
+            /* 客户信任和认证移动端 */
+            .brand-logos {
+                gap: 1rem;
+            }
+
+            .brand-logo {
+                padding: 1rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cert-item {
+                padding: 1rem;
             }
         }
 
@@ -1493,34 +1764,37 @@
         <h2 class="section-title">关于我</h2>
         <p class="section-subtitle">About Me</p>
         <div class="about-content">
-            <p style="font-size: 1.15rem; color: var(--gray); margin-bottom: 1.5rem; line-height: 1.8;">
-                你好！我是一名专业的电商设计师，拥有<strong>5 年 + 电商平台设计经验</strong>。专注于通过<strong>数据驱动的视觉设计</strong>帮助品牌提升用户体验和销售转化。
-            </p>
+            <div style="background: linear-gradient(145deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.85) 100%); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);">
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 1rem; letter-spacing: 2px;">品牌视觉策略师 | 电商增长专家</h3>
+                <p style="font-size: 1.1rem; color: var(--text-primary); line-height: 1.9; margin-bottom: 1.5rem;">
+                    专注于通过<span style="color: var(--gold); font-weight: 600;">数据驱动的设计思维</span>，将品牌价值转化为可量化的商业增长。5 年 + 服务 50+ 品牌，平均提升转化率 35%+。
+                </p>
 
-            <div style="background: white; border-radius: 16px; padding: 2rem; margin: 2rem 0; box-shadow: var(--shadow-md);">
-                <h4 style="text-align: center; margin-bottom: 1.5rem; color: var(--dark);">我的核心能力</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                    <div style="padding: 1rem;">
-                        <strong style="color: var(--primary);">🏪 跨平台设计</strong>
-                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">淘宝/天猫、京东、拼多多、小红书等主流电商平台</p>
-                    </div>
-                    <div style="padding: 1rem;">
-                        <strong style="color: var(--primary);">📊 数据优化</strong>
-                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">A/B 测试、转化率分析、用户行为研究</p>
-                    </div>
-                    <div style="padding: 1rem;">
-                        <strong style="color: var(--primary);">🔗 全链路设计</strong>
-                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">从品牌视觉到落地页，从 PC 端到移动端响应式适配</p>
-                    </div>
-                    <div style="padding: 1rem;">
-                        <strong style="color: var(--primary);">⚡ 快速交付</strong>
-                        <p style="color: var(--gray); margin-top: 0.5rem; font-size: 0.95rem;">平均 3 天交付周期，支持紧急项目 24 小时出稿</p>
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(212, 175, 55, 0.15);">
+                    <h4 style="color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 1px;">📐 我的设计方法论</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                        <div style="padding: 1rem; background: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 3px solid var(--gold);">
+                            <strong style="color: var(--text-primary);">🎯 用户洞察</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">深度分析目标客群行为模式与购买决策路径</p>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 3px solid var(--gold);">
+                            <strong style="color: var(--text-primary);">🔍 竞品解构</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">建立差异化视觉竞争优势，找到品牌独特定位</p>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 3px solid var(--gold);">
+                            <strong style="color: var(--text-primary);">📊 数据验证</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">A/B 测试驱动持续优化，让设计决策有据可依</p>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 3px solid var(--gold);">
+                            <strong style="color: var(--text-primary);">🔗 全链路整合</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">从品牌视觉到转化落地的一站式解决方案</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <p style="font-size: 1.1rem; color: var(--gray); margin-bottom: 2rem; line-height: 1.8;">
-                我相信好的设计不仅仅是美观，更要能够<strong>解决商业问题</strong>，传达品牌价值，为用户创造愉悦的购物体验。
+            <p style="font-size: 1.1rem; color: var(--gray); margin-bottom: 2rem; line-height: 1.8; text-align: center;">
+                我相信好的设计不仅仅是美观，更要能够<strong style="color: var(--primary);">解决商业问题</strong>，传达品牌价值，为用户创造愉悦的购物体验。
             </p>
             <div class="skills">
                 <span class="skill-tag">🏪 店铺首页设计</span>
@@ -1612,6 +1886,41 @@
         </div>
     </section>
 
+    <!-- 客户信任 -->
+    <section class="client-trust">
+        <h3>合作品牌</h3>
+        <div class="brand-logos">
+            <div class="brand-logo">🏪 天猫</div>
+            <div class="brand-logo">📦 京东</div>
+            <div class="brand-logo">🛍️ 拼多多</div>
+            <div class="brand-logo">📕 小红书</div>
+            <div class="brand-logo">🎵 抖音</div>
+        </div>
+    </section>
+
+    <!-- 专业认证 -->
+    <section class="certifications">
+        <h3>专业认证</h3>
+        <div class="cert-grid">
+            <div class="cert-item">
+                <span class="cert-icon">🏆</span>
+                <span>Adobe Certified Expert - Photoshop</span>
+            </div>
+            <div class="cert-item">
+                <span class="cert-icon">🎨</span>
+                <span>Adobe Certified Expert - Illustrator</span>
+            </div>
+            <div class="cert-item">
+                <span class="cert-icon">📊</span>
+                <span>Google Analytics 认证</span>
+            </div>
+            <div class="cert-item">
+                <span class="cert-icon">🎯</span>
+                <span>阿里妈妈营销认证</span>
+            </div>
+        </div>
+    </section>
+
     <!-- 作品集 - 全屏轮播 -->
     <section class="portfolio" id="portfolio">
         <div class="portfolio-header">
@@ -1626,13 +1935,28 @@
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>美妆品牌旗舰店首页</h3>
-                    <p>为知名美妆品牌打造的天猫旗舰店首页设计，突出品牌调性与产品特色</p>
-                    <div class="slide-tags">
-                        <span class="slide-tag">首页设计</span>
-                        <span class="slide-tag">美妆</span>
-                        <span class="slide-tag">品牌视觉</span>
+                    <div class="case-study-box">
+                        <h4>🎯 挑战</h4>
+                        <p>品牌调性模糊，用户停留时间仅 32 秒，转化率低于行业平均 20%</p>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 42% | 停留时长 +1.5 分钟</p>
+                    <div class="case-study-box">
+                        <h4>💡 策略</h4>
+                        <p>建立"轻奢科技感"视觉语言，强化产品功效可视化，优化购买路径</p>
+                    </div>
+                    <div class="case-metrics">
+                        <div class="case-metric">
+                            <span class="value">+42%</span>
+                            <span class="label">点击率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">+1.5min</span>
+                            <span class="label">停留时长</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">¥2.3M</span>
+                            <span class="label">月 GMV</span>
+                        </div>
+                    </div>
                     <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(1)">📋 查看设计策略</button>
                 </div>
             </div>
@@ -1643,13 +1967,28 @@
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>3C 数码产品详情页</h3>
-                    <p>电子产品详情页设计，通过清晰的视觉层次展示产品卖点与参数</p>
-                    <div class="slide-tags">
-                        <span class="slide-tag">详情页</span>
-                        <span class="slide-tag">3C 数码</span>
-                        <span class="slide-tag">卖点展示</span>
+                    <div class="case-study-box">
+                        <h4>🎯 挑战</h4>
+                        <p>参数展示混乱，用户无法快速理解产品优势，跳出率高达 65%</p>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 转化率提升 38% | 加购率 +25%</p>
+                    <div class="case-study-box">
+                        <h4>💡 策略</h4>
+                        <p>可视化参数对比 + 场景痛点引入，建立清晰的视觉层次和信息架构</p>
+                    </div>
+                    <div class="case-metrics">
+                        <div class="case-metric">
+                            <span class="value">+38%</span>
+                            <span class="label">转化率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">+25%</span>
+                            <span class="label">加购率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">-40%</span>
+                            <span class="label">跳出率</span>
+                        </div>
+                    </div>
                     <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(2)">📋 查看设计策略</button>
                 </div>
             </div>
@@ -1660,51 +1999,95 @@
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>双 11 大促活动页面</h3>
-                    <p>双 11 购物节专题页面，营造热烈的促销氛围，提升转化率</p>
-                    <div class="slide-tags">
-                        <span class="slide-tag">活动页面</span>
-                        <span class="slide-tag">促销设计</span>
-                        <span class="slide-tag">双 11</span>
+                    <div class="case-study-box">
+                        <h4>🎯 挑战</h4>
+                        <p>促销信息繁杂，用户注意力分散，需要营造紧迫感促进转化</p>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 GMV 破 500 万 | 转化率提升 55%</p>
+                    <div class="case-study-box">
+                        <h4>💡 策略</h4>
+                        <p>倒计时模块 + 渐变流光效果，强化优惠信息，爆款轮播展示</p>
+                    </div>
+                    <div class="case-metrics">
+                        <div class="case-metric">
+                            <span class="value">500 万</span>
+                            <span class="label">当日 GMV</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">+55%</span>
+                            <span class="label">转化率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">3.2M</span>
+                            <span class="label">页面 PV</span>
+                        </div>
+                    </div>
                     <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(3)">📋 查看设计策略</button>
                 </div>
             </div>
 
             <!-- 作品 4 -->
             <div class="slide">
-                <img src="images/母婴用品店铺装修/母婴1.png" alt="母婴用品店铺装修" class="slide-image">
+                <img src="images/母婴用品店铺装修/母婴 1.png" alt="母婴用品店铺装修" class="slide-image">
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>母婴用品店铺装修</h3>
-                    <p>温馨可爱的母婴店铺设计，营造安全信任的购物环境</p>
-                    <div class="slide-tags">
-                        <span class="slide-tag">店铺装修</span>
-                        <span class="slide-tag">母婴</span>
-                        <span class="slide-tag">温馨风格</span>
+                    <div class="case-study-box">
+                        <h4>🎯 挑战</h4>
+                        <p>市场主流视觉同质化严重，需要建立温馨且专业的品牌差异化形象</p>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 复购率提升 30% | 好评率 99%</p>
+                    <div class="case-study-box">
+                        <h4>💡 策略</h4>
+                        <p>暖色调营造温馨感，圆角元素传递亲和力，场景图展示使用情境</p>
+                    </div>
+                    <div class="case-metrics">
+                        <div class="case-metric">
+                            <span class="value">+30%</span>
+                            <span class="label">复购率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">99%</span>
+                            <span class="label">好评率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">+45%</span>
+                            <span class="label">客单价</span>
+                        </div>
+                    </div>
                     <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(4)">📋 查看设计策略</button>
                 </div>
             </div>
 
             <!-- 作品 5 -->
             <div class="slide">
-                <img src="images/美食厨房主图设计/热狗1.png" alt="美食厨房主图设计" class="slide-image">
+                <img src="images/美食厨房主图设计/热狗 1.png" alt="美食厨房主图设计" class="slide-image">
                 <div class="slide-overlay"></div>
                 <div class="slide-content">
                     <h3>美食厨房主图设计</h3>
-                    <p>食品类目主图设计系列，激发用户食欲与购买欲望</p>
-                    <div class="slide-tags">
-                        <span class="slide-tag">主图设计</span>
-                        <span class="slide-tag">食品</span>
-                        <span class="slide-tag">创意合成</span>
+                    <div class="case-study-box">
+                        <h4>🎯 挑战</h4>
+                        <p>同类目主图同质化严重，需要激发用户食欲与冲动购买欲望</p>
                     </div>
-                    <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">📈 点击率提升 65% | 爆款打造</p>
+                    <div class="case-study-box">
+                        <h4>💡 策略</h4>
+                        <p>高饱和度色彩 + 创意合成，特写镜头展示质感，蒸汽/酱汁等动态元素</p>
+                    </div>
+                    <div class="case-metrics">
+                        <div class="case-metric">
+                            <span class="value">+65%</span>
+                            <span class="label">点击率</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">TOP1</span>
+                            <span class="label">类目前列</span>
+                        </div>
+                        <div class="case-metric">
+                            <span class="value">10W+</span>
+                            <span class="label">月销量</span>
+                        </div>
+                    </div>
                     <button class="view-btn" style="margin-top: 1rem;" onclick="openStrategy(5)">📋 查看设计策略</button>
                 </div>
             </div>
-        </div>
 
         <!-- 控制按钮 -->
         <div class="slider-dots" id="sliderDots"></div>
