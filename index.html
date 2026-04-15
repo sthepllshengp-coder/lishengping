@@ -2313,6 +2313,27 @@
     </div>
 
     <script>
+        // 页面加载完成后隐藏 loader
+        window.addEventListener('DOMContentLoaded', () => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.classList.add('hidden');
+                // 300ms 后完全移除
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // 超时保护：如果 3 秒后还没加载完，强制隐藏
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.classList.add('hidden');
+                loader.style.display = 'none';
+            }
+        }, 3000);
+
         // PDF 加载提示
         function showPdfLoading() {
             const toast = document.getElementById('pdfLoadingToast');
